@@ -1,26 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import Editor from './Editor';
+import Previewer from './Previewer';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const placeholder = `
+# Header
+## Sub Header
+[text](link)
+my code: \`inline code\`
+\`\`\`js
+function () {
+  return true;
+}
+\`\`\`
+- list
+  - list
+      - list
+- list
+
+> blockquote
+
+![picture of javascript](https://miro.medium.com/max/720/1*LjR0UrFB2a__5h1DWqzstA.png)
+
+**bold text**
+`
+
+class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      text: placeholder
+    }
+    this.handleChangeText = this.handleChangeText.bind(this)
+  }
+
+  handleChangeText(e) {
+    const text = e.target.value
+    this.setState(() => ({
+      text
+    }))
+  }
+
+  render() {
+    return (
+      <div id="main" className="container">
+        <h1 className="text-center text-white p-3">Markdown Previewer</h1>
+        <div className="row">
+          <Editor
+          text={this.state.text}
+          handleChangeText={this.handleChangeText}
+          />
+          <Previewer text={this.state.text} />
+        </div>
+      </div>
+    )
+  }
 }
 
 export default App;
